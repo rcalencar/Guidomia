@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="lineSeparator">4dp</dimen>
     <color name="adText">#73000000</color>
     <color name="bulletPointText">#000000</color>
 </resources>

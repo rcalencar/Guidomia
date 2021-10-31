@@ -1,11 +1,12 @@
 package com.rcalencar.guidomia.ui
 
-import ListPaddingDecoration
-import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
 import com.rcalencar.guidomia.databinding.ActivityMainBinding
@@ -22,13 +23,14 @@ class ListActivity : AppCompatActivity() {
         val adapter = CarAdAdapter { }
 
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(
-            ListPaddingDecoration(
-                this as Activity,
-                32,
-                32
+        val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
+        ContextCompat.getDrawable(applicationContext, R.drawable.divider)?.let {
+            decorator.setDrawable(
+                it
             )
-        )
+        }
+        binding.recyclerView.addItemDecoration(decorator)
+        binding.recyclerView.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.default_padding).toInt()))
 
         listViewModel.liveData.observe(this, {
             it?.let {
