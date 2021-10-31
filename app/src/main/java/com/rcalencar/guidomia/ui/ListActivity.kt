@@ -20,7 +20,7 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val adapter = CarAdAdapter { }
+        val adapter = CarAdAdapter { item -> listViewModel.expand(item) }
 
         binding.recyclerView.adapter = adapter
         val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)

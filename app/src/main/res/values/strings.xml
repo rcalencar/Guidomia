@@ -2,7 +2,8 @@
     <string name="app_name">GUIDOMIA</string>
     <string name="ad_image">Ad Image</string>
     <string name="action_settings">Settings</string>
-
+    <string name="bullet_point">\u2022</string>
     <string name="car_ad_description">%1$s %2$s</string>
     <string name="car_ad_price">Price : %1$s</string>
+    <string name="empty_list">Nothing</string>
 </resources>

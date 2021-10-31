@@ -3,14 +3,17 @@ package com.rcalencar.guidomia.ui
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
+import com.rcalencar.guidomia.databinding.BulletPointBinding
 import com.rcalencar.guidomia.databinding.CarAdItemBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
@@ -24,6 +27,10 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
         private val priceView: TextView = itemView.carAdPrice
         private val imageView: ImageView = itemView.carAdImage
         private val ratingView: MaterialRatingBar = itemView.carAdRating
+        private val expandable: LinearLayout = itemView.carAdExpandable
+        private val pros: LinearLayout = itemView.carAdPros
+        private val cons: LinearLayout = itemView.carAdCons
+
         private var currentItem: CarAd? = null
 
         init {
@@ -42,6 +49,24 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
             priceView.text = itemView.context.getString(R.string.car_ad_price, carAd.formattedCustomerPrice())
             imageView.setImageAssets(itemView.context, "${carAd.id}.jpg")
             ratingView.rating = carAd.rating.toFloat()
+
+            expandable.visibility = View.GONE
+            bulletList(carAd.prosList, pros)
+            bulletList(carAd.consList, cons)
+
+            expandable.visibility = if (carAd.expanded) View.VISIBLE else View.GONE
+        }
+
+        private fun bulletList(list: List<String>, container: LinearLayout) {
+            container.removeAllViews()
+            val items = if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list
+
+            for (item in items) {
+                if (item.isEmpty()) continue
+                val binding = BulletPointBinding.inflate(LayoutInflater.from(itemView.context))
+                binding.bulletPointText.text = item
+                container.addView(binding.root)
+            }
         }
     }
 
