@@ -1,9 +1,11 @@
 package com.rcalencar.guidomia.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import ListPaddingDecoration
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
 import com.rcalencar.guidomia.databinding.ActivityMainBinding
@@ -20,6 +22,13 @@ class ListActivity : AppCompatActivity() {
         val adapter = CarAdAdapter { }
 
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            ListPaddingDecoration(
+                this as Activity,
+                32,
+                32
+            )
+        )
 
         listViewModel.liveData.observe(this, {
             it?.let {
