@@ -7,7 +7,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class DataSource(assets: AssetManager) {
-    private var initialList = carAdList(assets)
+    private val initialList = carAdList(assets)
     private val liveData = MutableLiveData(initialList)
 
     fun getList(): LiveData<List<CarAd>> {

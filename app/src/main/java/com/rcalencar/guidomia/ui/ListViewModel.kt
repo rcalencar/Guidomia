@@ -1,6 +1,7 @@
 package com.rcalencar.guidomia.ui
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,9 +10,17 @@ import com.rcalencar.guidomia.data.DataSource
 
 class ListViewModel(val dataSource: DataSource) : ViewModel() {
     val liveData = dataSource.getList()
-    var expandedItem: MutableLiveData<CarAd> = MutableLiveData(null)
-    var make: String? = null
-    var model: String? = null
+    private val _expandedItem: MutableLiveData<CarAd> = MutableLiveData(null)
+    val expandedItem: LiveData<CarAd>
+        get() {
+            return _expandedItem
+        }
+    private var make: String? = null
+    private var model: String? = null
+
+    fun expand(carAd: CarAd) {
+        _expandedItem.value = carAd
+    }
 
     fun filterMakes(selected: String?) {
         make = selected
@@ -31,7 +40,7 @@ class ListViewModel(val dataSource: DataSource) : ViewModel() {
 
     private fun expandFirst() {
         liveData.value?.getOrNull(0)?.let {
-            expandedItem.value = it
+            _expandedItem.value = it
         }
     }
 }
