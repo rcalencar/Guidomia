@@ -22,4 +22,8 @@
     <style name="Theme.Guidomia2021_2.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Guidomia2021_2.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem" />
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem" />
 </resources>

@@ -1,6 +1,7 @@
 package com.rcalencar.guidomia.ui
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rcalencar.guidomia.data.CarAd
@@ -8,18 +9,29 @@ import com.rcalencar.guidomia.data.DataSource
 
 class ListViewModel(val dataSource: DataSource) : ViewModel() {
     val liveData = dataSource.getList()
-    private lateinit var expandedItem: CarAd
+    var expandedItem: MutableLiveData<CarAd> = MutableLiveData(null)
+    var make: String? = null
+    var model: String? = null
 
-    fun expand(item: CarAd) {
-        expandedItem.expanded = false
-        item.expanded = true
-        expandedItem = item
+    fun filterMakes(selected: String?) {
+        make = selected
+        dataSource.filter(make, model)
+        expandFirst()
+    }
+
+    fun filterModel(selected: String?) {
+        model = selected
+        dataSource.filter(make, model)
+        expandFirst()
     }
 
     init {
-        liveData.value?.get(0)?.let {
-            it.expanded = true
-            expandedItem = it
+        expandFirst()
+    }
+
+    private fun expandFirst() {
+        liveData.value?.getOrNull(0)?.let {
+            expandedItem.value = it
         }
     }
 }

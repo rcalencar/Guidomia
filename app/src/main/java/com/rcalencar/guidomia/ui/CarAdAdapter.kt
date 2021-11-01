@@ -13,16 +13,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
-import com.rcalencar.guidomia.databinding.BulletPointBinding
+import com.rcalencar.guidomia.databinding.BulletPointItemBinding
 import com.rcalencar.guidomia.databinding.CarAdItemBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
 
-class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
+class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: () -> CarAd?) :
     ListAdapter<CarAd, CarAdAdapter.ViewHolder>(DiffCallback) {
 
-    class ViewHolder(itemView: CarAdItemBinding, val onClick: (CarAd) -> Unit) :
-        RecyclerView.ViewHolder(itemView.root) {
+    class ViewHolder(
+        itemView: CarAdItemBinding,
+        val expand: (CarAd) -> Unit,
+        val expanded: () -> CarAd?
+    ) : RecyclerView.ViewHolder(itemView.root) {
         private val textView: TextView = itemView.carAdDescription
         private val priceView: TextView = itemView.carAdPrice
         private val imageView: ImageView = itemView.carAdImage
@@ -36,8 +39,7 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
         init {
             itemView.root.setOnClickListener {
                 currentItem?.let {
-                    onClick(it)
-                    bindingAdapter?.notifyDataSetChanged()
+                    expand(it)
                 }
             }
         }
@@ -45,8 +47,10 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
         fun bind(carAd: CarAd) {
             currentItem = carAd
 
-            textView.text = itemView.context.getString(R.string.car_ad_description, carAd.make, carAd.model)
-            priceView.text = itemView.context.getString(R.string.car_ad_price, carAd.formattedCustomerPrice())
+            textView.text =
+                itemView.context.getString(R.string.car_ad_description, carAd.make, carAd.model)
+            priceView.text =
+                itemView.context.getString(R.string.car_ad_price, carAd.formattedCustomerPrice())
             imageView.setImageAssets(itemView.context, "${carAd.id}.jpg")
             ratingView.rating = carAd.rating.toFloat()
 
@@ -54,16 +58,17 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
             bulletList(carAd.prosList, pros)
             bulletList(carAd.consList, cons)
 
-            expandable.visibility = if (carAd.expanded) View.VISIBLE else View.GONE
+            expandable.visibility = if (carAd.id == expanded()?.id) View.VISIBLE else View.GONE
         }
 
         private fun bulletList(list: List<String>, container: LinearLayout) {
             container.removeAllViews()
-            val items = if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list
+            val items =
+                if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list
 
             for (item in items) {
                 if (item.isEmpty()) continue
-                val binding = BulletPointBinding.inflate(LayoutInflater.from(itemView.context))
+                val binding = BulletPointItemBinding.inflate(LayoutInflater.from(itemView.context))
                 binding.bulletPointText.text = item
                 container.addView(binding.root)
             }
@@ -72,7 +77,7 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CarAdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, onClick)
+        return ViewHolder(binding, expand, expanded)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

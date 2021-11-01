@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Guidomia2021_2.NoActionBar">
-        <activity android:name="com.rcalencar.guidomia.ui.ListActivity"
+        <activity
+            android:name="com.rcalencar.guidomia.ui.ListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

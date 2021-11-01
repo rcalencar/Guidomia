@@ -78,57 +78,57 @@
         android:id="@+id/car_ad_expandable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="32dp">
+        android:layout_marginStart="32dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Pros :"
             android:textColor="@color/adText"
-            android:layout_marginTop="8dp"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/car_ad_pros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Disk brake"
                 android:textColor="@color/bulletPointText"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="Disk brake" />
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Cons :"
             android:textColor="@color/adText"
-            android:layout_marginTop="8dp"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/car_ad_cons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Disk brake"
                 android:textColor="@color/bulletPointText"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="Disk brake" />
         </LinearLayout>
 
     </LinearLayout>
