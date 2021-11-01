@@ -20,6 +20,9 @@ import com.rcalencar.guidomia.databinding.CarAdItemBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
 
+const val BULLET_GAP_WIDTH = 22
+const val BULLET_RADIUS = 10
+
 class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
     ListAdapter<CarAd, CarAdAdapter.ViewHolder>(DiffCallback) {
 
@@ -64,13 +67,18 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
 
             val spannableStringBuilder = SpannableStringBuilder()
             for (i in items.indices) {
-                spannableStringBuilder.inSpans(BulletSpan(22, container.context.getColor(R.color.primaryColor), 10)) {
-                    append("${items[i]}${if (i < items.lastIndex)"\n" else ""}")
+                spannableStringBuilder.inSpans(BulletSpan(BULLET_GAP_WIDTH, container.context.getColor(R.color.primaryColor), BULLET_RADIUS)) {
+                    if (i < items.lastIndex) {
+                        append("${items[i]}\n")
+                    } else {
+                        append(items[i])
+                    }
                 }
             }
             container.text = spannableStringBuilder
         }
     }
+    
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CarAdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
