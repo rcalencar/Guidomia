@@ -2,18 +2,20 @@ package com.rcalencar.guidomia.ui
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.inSpans
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
-import com.rcalencar.guidomia.databinding.BulletPointBinding
 import com.rcalencar.guidomia.databinding.CarAdItemBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
@@ -28,8 +30,8 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
         private val imageView: ImageView = itemView.carAdImage
         private val ratingView: MaterialRatingBar = itemView.carAdRating
         private val expandable: LinearLayout = itemView.carAdExpandable
-        private val pros: LinearLayout = itemView.carAdPros
-        private val cons: LinearLayout = itemView.carAdCons
+        private val pros: TextView = itemView.carAdPros
+        private val cons: TextView = itemView.carAdCons
 
         private var currentItem: CarAd? = null
 
@@ -57,16 +59,16 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) :
             expandable.visibility = if (carAd.expanded) View.VISIBLE else View.GONE
         }
 
-        private fun bulletList(list: List<String>, container: LinearLayout) {
-            container.removeAllViews()
-            val items = if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list
+        private fun bulletList(list: List<String>, container: TextView) {
+            val items = if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list.filter { it.isNotEmpty() }
 
-            for (item in items) {
-                if (item.isEmpty()) continue
-                val binding = BulletPointBinding.inflate(LayoutInflater.from(itemView.context))
-                binding.bulletPointText.text = item
-                container.addView(binding.root)
+            val spannableStringBuilder = SpannableStringBuilder()
+            for (i in items.indices) {
+                spannableStringBuilder.inSpans(BulletSpan(22, container.context.getColor(R.color.primaryColor), 10)) {
+                    append("${items[i]}${if (i < items.lastIndex)"\n" else ""}")
+                }
             }
+            container.text = spannableStringBuilder
         }
     }
 

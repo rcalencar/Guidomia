@@ -6,4 +6,6 @@
     <string name="car_ad_description">%1$s %2$s</string>
     <string name="car_ad_price">Price : %1$s</string>
     <string name="empty_list">Nothing</string>
+    <string name="cons">Cons :</string>
+    <string name="pros">Pros :</string>
 </resources>
