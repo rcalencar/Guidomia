@@ -22,7 +22,6 @@ class MainListActivity : AppCompatActivity() {
     private val listViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
