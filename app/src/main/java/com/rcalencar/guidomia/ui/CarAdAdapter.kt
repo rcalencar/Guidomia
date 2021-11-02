@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +19,15 @@ import com.rcalencar.guidomia.databinding.CarAdItemBinding
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
 
-class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: () -> CarAd?) :
+class CarAdAdapter :
     ListAdapter<CarAd, CarAdAdapter.ViewHolder>(DiffCallback) {
+
+    private var expandedListItem: Pair<Int, CarAd>? = null
 
     class ViewHolder(
         itemView: CarAdItemBinding,
-        val expand: (CarAd) -> Unit,
-        val expanded: () -> CarAd?
+        val expand: (Pair<Int, CarAd>) -> Unit,
+        val expanded: () -> Pair<Int, CarAd>?
     ) : RecyclerView.ViewHolder(itemView.root) {
         private val textView: TextView = itemView.carAdDescription
         private val priceView: TextView = itemView.carAdPrice
@@ -34,7 +37,7 @@ class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: ()
         private val pros: LinearLayout = itemView.carAdPros
         private val cons: LinearLayout = itemView.carAdCons
 
-        private var currentItem: CarAd? = null
+        private var currentItem: Pair<Int, CarAd>? = null
 
         init {
             itemView.root.setOnClickListener {
@@ -44,8 +47,8 @@ class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: ()
             }
         }
 
-        fun bind(carAd: CarAd) {
-            currentItem = carAd
+        fun bind(index: Int, carAd: CarAd) {
+            currentItem = Pair(index, carAd)
 
             textView.text =
                 itemView.context.getString(R.string.car_ad_description, carAd.make, carAd.model)
@@ -54,11 +57,12 @@ class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: ()
             imageView.setImageAssets(itemView.context, "${carAd.id}.jpg")
             ratingView.rating = carAd.rating.toFloat()
 
-            expandable.visibility = View.GONE
+            expandable.isGone = true
             bulletList(carAd.prosList, pros)
             bulletList(carAd.consList, cons)
 
-            expandable.visibility = if (carAd.id == expanded()?.id) View.VISIBLE else View.GONE
+            expandable.visibility =
+                if (carAd.id == expanded()?.second?.id) View.VISIBLE else View.GONE
         }
 
         private fun bulletList(list: List<String>, container: LinearLayout) {
@@ -77,12 +81,22 @@ class CarAdAdapter(private val expand: (CarAd) -> Unit, private val expanded: ()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CarAdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, expand, expanded)
+        return ViewHolder(binding, expand, { expandedListItem })
+    }
+
+    val expand: (Pair<Int, CarAd>?) -> Unit = {
+        expandedListItem?.let {
+            notifyItemChanged(expandedListItem!!.first)
+        }
+        it?.let {
+            notifyItemChanged(it.first)
+        }
+        expandedListItem = it
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(position, item)
     }
 }
 

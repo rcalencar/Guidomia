@@ -15,6 +15,8 @@ import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.data.CarAd
 import com.rcalencar.guidomia.data.DataSource
 import com.rcalencar.guidomia.databinding.ActivityMainBinding
+import com.rcalencar.guidomia.model.CarAdListViewModel
+import com.rcalencar.guidomia.model.ListViewModelFactory
 
 class MainListActivity : AppCompatActivity() {
     private val listViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
@@ -26,7 +28,7 @@ class MainListActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val carAdAdapter = CarAdAdapter({ item -> listViewModel.expand(item) }, { listViewModel.expandedItem.value })
+        val carAdAdapter = CarAdAdapter()
         binding.recyclerView.adapter = carAdAdapter
         val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
         ContextCompat.getDrawable(applicationContext, R.drawable.divider)?.let {
@@ -43,15 +45,13 @@ class MainListActivity : AppCompatActivity() {
 
         listViewModel.liveData.observe(this, {
             it?.let {
+                carAdAdapter.expand(null)
                 carAdAdapter.submitList(it as MutableList<CarAd>) {
+                    if (it.isNotEmpty()) {
+                        carAdAdapter.expand(Pair(0, it.first()))
+                    }
                     binding.recyclerView.scrollToPosition(0)
                 }
-            }
-        })
-
-        listViewModel.expandedItem.observe(this, {
-            it?.let {
-                carAdAdapter.notifyDataSetChanged()
             }
         })
 
