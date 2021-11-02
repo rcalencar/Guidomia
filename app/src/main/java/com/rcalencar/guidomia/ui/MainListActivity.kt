@@ -16,8 +16,8 @@ import com.rcalencar.guidomia.data.CarAd
 import com.rcalencar.guidomia.data.DataSource
 import com.rcalencar.guidomia.databinding.ActivityMainBinding
 
-class ListActivity : AppCompatActivity() {
-    private val listViewModel by viewModels<ListViewModel> { ListViewModelFactory(this) }
+class MainListActivity : AppCompatActivity() {
+    private val listViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -70,7 +70,7 @@ class ListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@ListActivity.getString(R.string.any_make)) listViewModel.filterMakes(
+                    if (selected == this@MainListActivity.getString(R.string.any_make)) listViewModel.filterMakes(
                         null
                     ) else listViewModel.filterMakes(selected)
                 }
@@ -96,7 +96,7 @@ class ListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@ListActivity.getString(R.string.any_model)) listViewModel.filterModel(
+                    if (selected == this@MainListActivity.getString(R.string.any_model)) listViewModel.filterModel(
                         null
                     ) else listViewModel.filterModel(selected)
                 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.rcalencar.guidomia.data.CarAd
 import com.rcalencar.guidomia.data.DataSource
 
-class ListViewModel(val dataSource: DataSource) : ViewModel() {
+class CarAdListViewModel(val dataSource: DataSource) : ViewModel() {
     val liveData = dataSource.getList()
     private val _expandedItem: MutableLiveData<CarAd> = MutableLiveData(null)
     val expandedItem: LiveData<CarAd>
@@ -47,9 +47,9 @@ class ListViewModel(val dataSource: DataSource) : ViewModel() {
 
 class ListViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ListViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(CarAdListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ListViewModel(
+            return CarAdListViewModel(
                 dataSource = DataSource.getDataSource(context.assets)
             ) as T
         }
