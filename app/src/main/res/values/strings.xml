@@ -5,6 +5,11 @@
     <string name="car_ad_description">%1$s %2$s</string>
     <string name="car_ad_price">Price : %1$s</string>
     <string name="empty_list">Nothing</string>
-    <string name="cons">Cons :</string>
+    <string name="filters">Filters</string>
+    <string name="any_make">"Any make"</string>
+    <string name="any_model">"Any model"</string>
+    <string name="get_your_s_now">Get your\'s now</string>
+    <string name="tacoma_2021">Tacoma 2021</string>
     <string name="pros">Pros :</string>
+    <string name="cons">Cons :</string>
 </resources>
