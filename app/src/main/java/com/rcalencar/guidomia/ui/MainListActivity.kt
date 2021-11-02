@@ -43,7 +43,9 @@ class MainListActivity : AppCompatActivity() {
 
         listViewModel.liveData.observe(this, {
             it?.let {
-                carAdAdapter.submitList(it as MutableList<CarAd>)
+                carAdAdapter.submitList(it as MutableList<CarAd>) {
+                    binding.recyclerView.scrollToPosition(0)
+                }
             }
         })
 
