@@ -54,7 +54,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter" />
+            app:layout_constraintTop_toBottomOf="@+id/filter"
+            android:clipToPadding="false"
+            android:paddingBottom="86dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/filter"
+        android:contentDescription="@string/ad_image"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/primaryLightColor"
+        app:tint="@color/white" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

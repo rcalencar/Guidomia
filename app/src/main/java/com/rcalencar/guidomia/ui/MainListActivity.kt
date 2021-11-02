@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rcalencar.guidomia.R
@@ -105,6 +106,10 @@ class MainListActivity : AppCompatActivity() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+
+        binding.fab.setOnClickListener {
+            binding.filter.root.isGone = !binding.filter.root.isGone
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
