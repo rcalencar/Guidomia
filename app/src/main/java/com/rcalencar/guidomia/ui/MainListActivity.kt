@@ -1,6 +1,5 @@
 package com.rcalencar.guidomia.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -19,7 +18,7 @@ import com.rcalencar.guidomia.model.CarAdListViewModel
 import com.rcalencar.guidomia.model.ListViewModelFactory
 
 class MainListActivity : AppCompatActivity() {
-    private val listViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
+    private val carAdListViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +41,7 @@ class MainListActivity : AppCompatActivity() {
             )
         )
 
-        listViewModel.liveData.observe(this, {
+        carAdListViewModel.liveData.observe(this, {
             it?.let {
                 carAdAdapter.expand(null)
                 carAdAdapter.submitList(it as MutableList<CarAd>) {
@@ -71,9 +70,9 @@ class MainListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@MainListActivity.getString(R.string.any_make)) listViewModel.filterMakes(
+                    if (selected == this@MainListActivity.getString(R.string.any_make)) carAdListViewModel.filterMakes(
                         null
-                    ) else listViewModel.filterMakes(selected)
+                    ) else carAdListViewModel.filterMakes(selected)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -97,9 +96,9 @@ class MainListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@MainListActivity.getString(R.string.any_model)) listViewModel.filterModel(
+                    if (selected == this@MainListActivity.getString(R.string.any_model)) carAdListViewModel.filterModel(
                         null
-                    ) else listViewModel.filterModel(selected)
+                    ) else carAdListViewModel.filterModel(selected)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
