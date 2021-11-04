@@ -2,6 +2,8 @@ package com.rcalencar.guidomia.ui
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
 import android.view.LayoutInflater
@@ -10,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.inSpans
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -72,21 +73,13 @@ class CarAdAdapter :
 
         private fun bulletList(list: List<String>, container: TextView) {
             val items = if (list.isEmpty()) listOf(container.context.getString(R.string.empty_list)) else list.filter { it.isNotEmpty() }
-
-            val spannableStringBuilder = SpannableStringBuilder()
-            for (i in items.indices) {
-                spannableStringBuilder.inSpans(BulletSpan(BULLET_GAP_WIDTH, container.context.getColor(R.color.primaryColor), BULLET_RADIUS)) {
-                    if (i < items.lastIndex) {
-                        append("${items[i]}\n")
-                    } else {
-                        append(items[i])
-                    }
+            container.text = items.joinTo(SpannableStringBuilder(), System.lineSeparator()) {
+                SpannableString(it).apply {
+                    setSpan(BulletSpan(BULLET_GAP_WIDTH, container.context.getColor(R.color.primaryColor), BULLET_RADIUS), 0, this.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
                 }
             }
-            container.text = spannableStringBuilder
         }
     }
-    
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CarAdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
