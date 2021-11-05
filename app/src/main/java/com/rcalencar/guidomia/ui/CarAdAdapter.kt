@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -39,7 +39,7 @@ class CarAdAdapter :
         private val priceView: TextView = itemView.carAdPrice
         private val imageView: ImageView = itemView.carAdImage
         private val ratingView: MaterialRatingBar = itemView.carAdRating
-        private val expandable: LinearLayout = itemView.carAdExpandable
+        private val expandable: Group = itemView.carAdExpandable
         private val pros: TextView = itemView.carAdPros
         private val cons: TextView = itemView.carAdCons
 
