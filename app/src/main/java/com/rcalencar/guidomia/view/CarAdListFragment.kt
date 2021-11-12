@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.rcalencar.guidomia.GuidomiaApplication
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.databinding.FragmentCarAdListBinding
@@ -33,6 +34,12 @@ class CarAdListFragment : Fragment() {
         _binding = FragmentCarAdListBinding.inflate(inflater, container, false)
 
         val repository = (requireActivity().application as GuidomiaApplication).repository
+
+        Glide.with(this)
+            .load(getString(R.string.ad_url))
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .fitCenter()
+            .into(binding.topAdBanner.bannerAdImage);
 
         val carAdAdapter = CarAdAdapter {
                 item -> carAdListViewModel.selectItem(item)
