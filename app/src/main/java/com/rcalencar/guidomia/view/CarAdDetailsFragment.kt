@@ -9,10 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.rcalencar.guidomia.databinding.FragmentCarAdDetailsBinding
 import com.rcalencar.guidomia.model.CarAd
-import com.rcalencar.guidomia.viewmodel.CarAdViewModel
+import com.rcalencar.guidomia.viewmodel.CarAdListViewModel
 
 class CarAdDetailsFragment : Fragment(), Observer<CarAd> {
-    private val carAdViewModel: CarAdViewModel by activityViewModels()
+    private val carAdListViewModel: CarAdListViewModel by activityViewModels()
 
     private var _binding: FragmentCarAdDetailsBinding? = null
     private val binding get() = _binding!!
@@ -23,20 +23,20 @@ class CarAdDetailsFragment : Fragment(), Observer<CarAd> {
     ): View {
         _binding = FragmentCarAdDetailsBinding.inflate(inflater, container, false)
 
-        carAdViewModel.selectedItem.observe(requireActivity(), this)
+        carAdListViewModel.selectedItem.observe(requireActivity(), this)
 
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        carAdViewModel.selectedItem.removeObserver(this)
+        carAdListViewModel.selectedItem.removeObserver(this)
         _binding = null
     }
 
     override fun onChanged(item: CarAd?) {
         item?.let {
-            binding.carAdImage.setImageAssets(requireContext(), "${item.id}.jpg")
+            binding.carAdImage.setImageAssets(requireContext(), item.image())
         }
     }
 }

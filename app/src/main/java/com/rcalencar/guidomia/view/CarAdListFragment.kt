@@ -9,41 +9,34 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rcalencar.guidomia.GuidomiaApplication
 import com.rcalencar.guidomia.R
 import com.rcalencar.guidomia.databinding.FragmentCarAdListBinding
 import com.rcalencar.guidomia.model.CarAd
-import com.rcalencar.guidomia.model.DataSource
 import com.rcalencar.guidomia.viewmodel.CarAdListViewModel
-import com.rcalencar.guidomia.viewmodel.CarAdViewModel
-import com.rcalencar.guidomia.viewmodel.ListViewModelFactory
+import kotlinx.coroutines.launch
 
 class CarAdListFragment : Fragment() {
-
     private var _binding: FragmentCarAdListBinding? = null
     private val binding get() = _binding!!
 
-    private val carAdViewModel: CarAdViewModel by activityViewModels()
-    private val carAdListViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(requireActivity()) }
+    private val carAdListViewModel: CarAdListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentCarAdListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val repository = (requireActivity().application as GuidomiaApplication).repository
 
         val carAdAdapter = CarAdAdapter {
-                item -> carAdViewModel.selectItem(item)
-                findNavController().navigate(R.id.action_List_to_Detail)
+                item -> carAdListViewModel.selectItem(item)
+            findNavController().navigate(R.id.action_List_to_Detail)
         }
         binding.recyclerView.adapter = carAdAdapter
         val decorator = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
@@ -74,9 +67,14 @@ class CarAdListFragment : Fragment() {
         val makesAdapter = ArrayAdapter(
             requireActivity(),
             R.layout.spinner_item_simple,
-            arrayOf(this.getString(R.string.any_make)) + DataSource.getDataSource(requireActivity().assets)
-                .getMakes()
+            mutableListOf(this.getString(R.string.any_make))
         )
+
+        lifecycleScope.launch {
+            val queryResult = repository.getMakes()
+            makesAdapter.addAll(queryResult)
+        }
+
         makesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.filter.filterMake.adapter = makesAdapter
         binding.filter.filterMake.onItemSelectedListener =
@@ -100,9 +98,14 @@ class CarAdListFragment : Fragment() {
         val modelsAdapter = ArrayAdapter(
             requireActivity(),
             R.layout.spinner_item_simple,
-            arrayOf(this.getString(R.string.any_model)) + DataSource.getDataSource(requireActivity().assets)
-                .getModels()
+            mutableListOf(this.getString(R.string.any_model))
         )
+
+        lifecycleScope.launch {
+            val queryResult = repository.getModels()
+            modelsAdapter.addAll(queryResult)
+        }
+
         modelsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.filter.filterModel.adapter = modelsAdapter
         binding.filter.filterModel.onItemSelectedListener =
@@ -122,10 +125,12 @@ class CarAdListFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 }

@@ -1,34 +1,31 @@
 package com.rcalencar.guidomia.viewmodel
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.rcalencar.guidomia.model.DataSource
+import android.app.Application
+import androidx.lifecycle.*
+import com.rcalencar.guidomia.GuidomiaApplication
+import com.rcalencar.guidomia.model.CarAd
 
-class CarAdListViewModel(val dataSource: DataSource) : ViewModel() {
-    val liveData = dataSource.getList()
+class CarAdListViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository = (application as GuidomiaApplication).repository
+    val liveData: LiveData<List<CarAd>> = repository.liveData
+
     private var make: String? = null
     private var model: String? = null
 
+    private val mutableSelectedItem = MutableLiveData<CarAd>()
+    val selectedItem: LiveData<CarAd> get() = mutableSelectedItem
+
+    fun selectItem(item: CarAd) {
+        mutableSelectedItem.value = item
+    }
+
     fun filterMakes(selected: String?) {
         make = selected
-        dataSource.filter(make, model)
+        repository.filter(make, model)
     }
 
     fun filterModel(selected: String?) {
         model = selected
-        dataSource.filter(make, model)
-    }
-}
-
-class ListViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CarAdListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return CarAdListViewModel(
-                dataSource = DataSource.getDataSource(context.assets)
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        repository.filter(make, model)
     }
 }

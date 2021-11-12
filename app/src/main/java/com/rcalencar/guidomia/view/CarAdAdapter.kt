@@ -60,7 +60,7 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) : ListAdapter<CarAd, Ca
                 itemView.context.getString(R.string.car_ad_description, carAd.make, carAd.model)
             priceView.text =
                 itemView.context.getString(R.string.car_ad_price, carAd.formattedCustomerPrice())
-            imageView.setImageAssets(itemView.context, "${carAd.id}.jpg")
+            imageView.setImageAssets(itemView.context, carAd.image())
             ratingView.rating = carAd.rating.toFloat()
 
             expandable.isGone = true
@@ -68,7 +68,7 @@ class CarAdAdapter(private val onClick: (CarAd) -> Unit) : ListAdapter<CarAd, Ca
             bulletList(carAd.consList, cons)
 
             expandable.visibility =
-                if (carAd.id == expanded()?.second?.id) View.VISIBLE else View.GONE
+                if (carAd.uid == expanded()?.second?.uid) View.VISIBLE else View.GONE
 
             more.setOnClickListener {
                 onClick(carAd)
@@ -112,7 +112,7 @@ object DiffCallback : DiffUtil.ItemCallback<CarAd>() {
     }
 
     override fun areContentsTheSame(oldItem: CarAd, newItem: CarAd): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.uid == newItem.uid
     }
 }
 
