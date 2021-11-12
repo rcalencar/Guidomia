@@ -137,8 +137,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:padding="8dp"
-        android:textSize="14sp"
         android:text="@string/more"
+        android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -146,7 +147,7 @@
         android:id="@+id/car_ad_expandable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textView3,car_ad_pros,textView4,car_ad_cons,more" />
+        app:constraint_referenced_ids="textView3,car_ad_pros,textView4,car_ad_cons" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
