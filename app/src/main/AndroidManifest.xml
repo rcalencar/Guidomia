@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Guidomia2021_2.NoActionBar">
         <activity
-            android:name="com.rcalencar.guidomia.ui.MainListActivity"
+            android:name="com.rcalencar.guidomia.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

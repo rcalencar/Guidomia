@@ -1,35 +1,53 @@
-package com.rcalencar.guidomia.ui
+package com.rcalencar.guidomia.view
 
 import android.os.Bundle
-import android.view.Menu
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rcalencar.guidomia.R
-import com.rcalencar.guidomia.data.CarAd
-import com.rcalencar.guidomia.data.DataSource
-import com.rcalencar.guidomia.databinding.ActivityMainBinding
-import com.rcalencar.guidomia.model.CarAdListViewModel
-import com.rcalencar.guidomia.model.ListViewModelFactory
+import com.rcalencar.guidomia.databinding.FragmentCarAdListBinding
+import com.rcalencar.guidomia.model.CarAd
+import com.rcalencar.guidomia.model.DataSource
+import com.rcalencar.guidomia.viewmodel.CarAdListViewModel
+import com.rcalencar.guidomia.viewmodel.CarAdViewModel
+import com.rcalencar.guidomia.viewmodel.ListViewModelFactory
 
-class MainListActivity : AppCompatActivity() {
-    private val carAdListViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(this) }
-    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+class CarAdListFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+    private var _binding: FragmentCarAdListBinding? = null
+    private val binding get() = _binding!!
 
-        val carAdAdapter = CarAdAdapter()
+    private val carAdViewModel: CarAdViewModel by activityViewModels()
+    private val carAdListViewModel by viewModels<CarAdListViewModel> { ListViewModelFactory(requireActivity()) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = FragmentCarAdListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val carAdAdapter = CarAdAdapter {
+                item -> carAdViewModel.selectItem(item)
+                findNavController().navigate(R.id.action_List_to_Detail)
+        }
         binding.recyclerView.adapter = carAdAdapter
-        val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
-        ContextCompat.getDrawable(applicationContext, R.drawable.divider)?.let {
+        val decorator = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        ContextCompat.getDrawable(requireActivity(), R.drawable.divider)?.let {
             decorator.setDrawable(
                 it
             )
@@ -41,7 +59,7 @@ class MainListActivity : AppCompatActivity() {
             )
         )
 
-        carAdListViewModel.liveData.observe(this, {
+        carAdListViewModel.liveData.observe(requireActivity(), {
             it?.let {
                 carAdAdapter.expand(null)
                 carAdAdapter.submitList(it as MutableList<CarAd>) {
@@ -54,9 +72,9 @@ class MainListActivity : AppCompatActivity() {
         })
 
         val makesAdapter = ArrayAdapter(
-            this,
-            R.layout.simple_spinner_item,
-            arrayOf(this.getString(R.string.any_make)) + DataSource.getDataSource(this.assets)
+            requireActivity(),
+            R.layout.spinner_item_simple,
+            arrayOf(this.getString(R.string.any_make)) + DataSource.getDataSource(requireActivity().assets)
                 .getMakes()
         )
         makesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -70,7 +88,7 @@ class MainListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@MainListActivity.getString(R.string.any_make)) carAdListViewModel.filterMakes(
+                    if (selected == this@CarAdListFragment.getString(R.string.any_make)) carAdListViewModel.filterMakes(
                         null
                     ) else carAdListViewModel.filterMakes(selected)
                 }
@@ -80,9 +98,9 @@ class MainListActivity : AppCompatActivity() {
             }
 
         val modelsAdapter = ArrayAdapter(
-            this,
-            R.layout.simple_spinner_item,
-            arrayOf(this.getString(R.string.any_model)) + DataSource.getDataSource(this.assets)
+            requireActivity(),
+            R.layout.spinner_item_simple,
+            arrayOf(this.getString(R.string.any_model)) + DataSource.getDataSource(requireActivity().assets)
                 .getModels()
         )
         modelsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -96,7 +114,7 @@ class MainListActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     val selected: String = parent?.getItemAtPosition(pos) as String
-                    if (selected == this@MainListActivity.getString(R.string.any_model)) carAdListViewModel.filterModel(
+                    if (selected == this@CarAdListFragment.getString(R.string.any_model)) carAdListViewModel.filterModel(
                         null
                     ) else carAdListViewModel.filterModel(selected)
                 }
@@ -106,8 +124,8 @@ class MainListActivity : AppCompatActivity() {
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

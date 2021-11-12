@@ -1,4 +1,4 @@
-package com.rcalencar.guidomia.data
+package com.rcalencar.guidomia.model
 
 import kotlinx.serialization.Serializable
 

@@ -1,9 +1,9 @@
-package com.rcalencar.guidomia.model
+package com.rcalencar.guidomia.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.rcalencar.guidomia.data.DataSource
+import com.rcalencar.guidomia.model.DataSource
 
 class CarAdListViewModel(val dataSource: DataSource) : ViewModel() {
     val liveData = dataSource.getList()

@@ -1,4 +1,4 @@
-package com.rcalencar.guidomia.ui
+package com.rcalencar.guidomia.view
 
 import android.graphics.Rect
 import android.view.View

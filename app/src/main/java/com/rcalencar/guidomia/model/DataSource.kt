@@ -1,4 +1,4 @@
-package com.rcalencar.guidomia.data
+package com.rcalencar.guidomia.model
 
 import android.content.res.AssetManager
 import androidx.lifecycle.LiveData

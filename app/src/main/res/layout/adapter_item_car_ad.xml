@@ -125,15 +125,28 @@
         android:textColor="@color/bulletPointText"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:text="Disk brake" />
 
+    <TextView
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:textSize="14sp"
+        android:text="@string/more"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/car_ad_expandable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textView3,car_ad_pros,textView4,car_ad_cons" />
+        app:constraint_referenced_ids="textView3,car_ad_pros,textView4,car_ad_cons,more" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

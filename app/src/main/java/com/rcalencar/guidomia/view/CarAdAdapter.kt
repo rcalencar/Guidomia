@@ -1,4 +1,4 @@
-package com.rcalencar.guidomia.ui
+package com.rcalencar.guidomia.view
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -17,23 +17,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rcalencar.guidomia.R
-import com.rcalencar.guidomia.data.CarAd
-import com.rcalencar.guidomia.databinding.CarAdItemBinding
+import com.rcalencar.guidomia.databinding.AdapterItemCarAdBinding
+import com.rcalencar.guidomia.model.CarAd
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.io.IOException
 
 const val BULLET_GAP_WIDTH = 22
 const val BULLET_RADIUS = 10
 
-class CarAdAdapter :
-    ListAdapter<CarAd, CarAdAdapter.ViewHolder>(DiffCallback) {
-
+class CarAdAdapter(private val onClick: (CarAd) -> Unit) : ListAdapter<CarAd, CarAdAdapter.ViewHolder>(DiffCallback) {
     private var expandedListItem: Pair<Int, CarAd>? = null
 
     class ViewHolder(
-        itemView: CarAdItemBinding,
+        itemView: AdapterItemCarAdBinding,
         val expand: (Pair<Int, CarAd>) -> Unit,
-        val expanded: () -> Pair<Int, CarAd>?
+        val expanded: () -> Pair<Int, CarAd>?,
+        val onClick: (CarAd) -> Unit
     ) : RecyclerView.ViewHolder(itemView.root) {
         private val textView: TextView = itemView.carAdDescription
         private val priceView: TextView = itemView.carAdPrice
@@ -42,6 +41,7 @@ class CarAdAdapter :
         private val expandable: Group = itemView.carAdExpandable
         private val pros: TextView = itemView.carAdPros
         private val cons: TextView = itemView.carAdCons
+        private val more: TextView = itemView.more
 
         private var currentItem: Pair<Int, CarAd>? = null
 
@@ -69,6 +69,10 @@ class CarAdAdapter :
 
             expandable.visibility =
                 if (carAd.id == expanded()?.second?.id) View.VISIBLE else View.GONE
+
+            more.setOnClickListener {
+                onClick(carAd)
+            }
         }
 
         private fun bulletList(list: List<String>, container: TextView) {
@@ -82,8 +86,8 @@ class CarAdAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = CarAdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, expand, { expandedListItem })
+        val binding = AdapterItemCarAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, expand, { expandedListItem }, onClick)
     }
 
     val expand: (Pair<Int, CarAd>?) -> Unit = {
