@@ -32,6 +32,11 @@ class CarAdListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCarAdListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val repository = (requireActivity().application as GuidomiaApplication).repository
 
@@ -132,12 +137,10 @@ class CarAdListFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
-
-        return binding.root
     }
 
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
