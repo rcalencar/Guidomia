@@ -22,16 +22,13 @@ import com.rcalencar.guidomia.viewmodel.CarAdListViewModel
 import kotlinx.coroutines.launch
 
 class CarAdListFragment : Fragment() {
-    private var _binding: FragmentCarAdListBinding? = null
-    private val binding get() = _binding!!
-
     private val carAdListViewModel: CarAdListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCarAdListBinding.inflate(inflater, container, false)
+        val binding = FragmentCarAdListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,6 +36,7 @@ class CarAdListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val repository = (requireActivity().application as GuidomiaApplication).repository
+        val binding = FragmentCarAdListBinding.bind(view)
 
         Glide.with(this)
             .load(getString(R.string.ad_url))
@@ -137,10 +135,5 @@ class CarAdListFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

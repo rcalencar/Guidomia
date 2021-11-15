@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
 class GuidomiaApplication : Application() {
-    val applicationScope = CoroutineScope(SupervisorJob())
+    private val applicationScope = CoroutineScope(SupervisorJob())
 
     private val database by lazy { CarAdRoomDatabase.getDatabase(this, applicationScope) }
     val repository by lazy { CarAdRepository(database.carAdDao()) }
