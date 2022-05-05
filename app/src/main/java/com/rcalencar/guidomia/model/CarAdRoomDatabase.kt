@@ -34,14 +34,14 @@ abstract class CarAdRoomDatabase : RoomDatabase() {
                     "car_ad_database"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(WordDatabaseCallback(context, scope))
+                    .addCallback(CarAdDatabaseCallback(context, scope))
                     .build()
                 INSTANCE = instance
                 instance
             }
         }
 
-        private class WordDatabaseCallback(
+        private class CarAdDatabaseCallback(
             private val context: Context,
             private val scope: CoroutineScope
         ) : RoomDatabase.Callback() {
@@ -61,12 +61,10 @@ abstract class CarAdRoomDatabase : RoomDatabase() {
     }
 }
 
-
 private val json = Json { ignoreUnknownKeys = true }
 
 fun carAdList(assets: AssetManager): List<CarAd> {
     val fileInString = assets.open("car_list.json").bufferedReader().use { it.readText() }
     val data = json.decodeFromString<Array<CarAd>>(fileInString)
-    data.forEachIndexed { index, carAd -> carAd.uid = index }
     return data.toList()
 }

@@ -1,7 +1,9 @@
 package com.rcalencar.guidomia.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.rcalencar.guidomia.GuidomiaApplication
 import com.rcalencar.guidomia.model.CarAd
 

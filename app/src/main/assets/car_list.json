@@ -11,7 +11,8 @@
       "You can go everywhere",
       "Good sound system"
     ],
-    "rating": 3
+    "rating": 3,
+    "uid" : 1
   },
   {
     "consList": [
@@ -27,7 +28,8 @@
       "",
       ""
     ],
-    "rating": 4
+    "rating": 4,
+    "uid" : 2
   },
   {
     "consList": [
@@ -44,7 +46,8 @@
       "Can bring the family home safely",
       "The city must have"
     ],
-    "rating": 5
+    "rating": 5,
+    "uid" : 3
   },
   {
     "consList": [
@@ -56,6 +59,7 @@
     "marketPrice": 85900.0,
     "model": "GLE coupe",
     "prosList": [],
-    "rating": 2
+    "rating": 2,
+    "uid" : 4
   }
 ]
