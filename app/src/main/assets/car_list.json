@@ -76,5 +76,50 @@
     ],
     "rating": 3,
     "uid" : 5
+  },
+  {
+    "consList": [
+      "Bad direction"
+    ],
+    "customerPrice": 120000.0,
+    "make": "Land Rover",
+    "marketPrice": 125000.0,
+    "model": "New Rover",
+    "prosList": [
+      "You can go everywhere",
+      "Good sound system"
+    ],
+    "rating": 3,
+    "uid" : 6
+  },
+  {
+    "consList": [
+      "Bad direction"
+    ],
+    "customerPrice": 120000.0,
+    "make": "Land Rover",
+    "marketPrice": 125000.0,
+    "model": "New Rover",
+    "prosList": [
+      "You can go everywhere",
+      "Good sound system"
+    ],
+    "rating": 3,
+    "uid" : 7
+  },
+  {
+    "consList": [
+      "Bad direction"
+    ],
+    "customerPrice": 120000.0,
+    "make": "Land Rover",
+    "marketPrice": 125000.0,
+    "model": "New Rover",
+    "prosList": [
+      "You can go everywhere",
+      "Good sound system"
+    ],
+    "rating": 3,
+    "uid" : 8
   }
 ]

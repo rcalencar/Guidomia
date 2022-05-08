@@ -15,6 +15,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,9 +26,9 @@ import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -88,18 +89,25 @@ fun GuidomiaScreen(carAdListViewModel: CarAdListViewModel = viewModel()) {
     val selectedItem by carAdListViewModel.selectedItem.observeAsState()
 
     Column {
-        DropdownFilter(
-            label = "Any make",
-            selected = selectedMake,
-            items = makes,
-            onSelected = { make -> carAdListViewModel.filterByMakes(make) }
-        )
-        DropdownFilter(
-            label = "Any model",
-            selected = selectedModel,
-            items = models,
-            onSelected = { model -> carAdListViewModel.filterByModel(model) }
-        )
+        Card(
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+            backgroundColor = colorResource(id = R.color.lightGray)
+        ) {
+            Column {
+                DropdownFilter(
+                    label = "Any make",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp).fillMaxWidth(),
+                    selected = selectedMake,
+                    items = makes
+                ) { make -> carAdListViewModel.filterByMakes(make) }
+                DropdownFilter(
+                    label = "Any model",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp).fillMaxWidth(),
+                    selected = selectedModel,
+                    items = models
+                ) { model -> carAdListViewModel.filterByModel(model) }
+            }
+        }
         CardAdList(
             adList = carAdList,
             selectedItem = selectedItem,
@@ -266,13 +274,13 @@ private fun bulletList(list: List<String>, container: TextView) {
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@Preview
 @Composable
 fun DropdownFilter(
-    label: String = "Label",
+    label: String,
+    modifier: Modifier = Modifier,
     selected: String? = null,
     items: List<String> = emptyList(),
-    onSelected: (String?) -> Unit = { }
+    onSelected: (String?) -> Unit = { },
 ) {
     val options = listOf(label) + items
     var expanded by remember { mutableStateOf(false) }
@@ -282,9 +290,10 @@ fun DropdownFilter(
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
-        }
+        },
+        modifier = modifier
     ) {
-        TextField(
+        OutlinedTextField(
             readOnly = true,
             value = selectedOptionText,
             onValueChange = { },
@@ -293,7 +302,8 @@ fun DropdownFilter(
                     expanded = expanded
                 )
             },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            modifier = Modifier.fillMaxWidth()
         )
         ExposedDropdownMenu(
             expanded = expanded,
