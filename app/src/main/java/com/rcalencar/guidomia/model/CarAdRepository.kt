@@ -4,33 +4,41 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 
 class CarAdRepository(private val carAdDao: CarAdDao) {
-    val liveData = carAdDao.getAll().asLiveData()
+    val carAds = MediatorLiveData<List<CarAd>>()
+    val makes = carAdDao.getMakes().asLiveData()
+    val models = MediatorLiveData<List<String>>()
 
-    fun filter(make: String? = null, model: String? = null) {
-//        if (make != null && model != null) {
-//            liveData.addSource(carAdDao.getByMakeAndModel(make, model).asLiveData()) { value ->
-//                liveData.setValue(value)
-//            }
-//        } else if (make != null) {
-//            liveData.addSource(carAdDao.getByMake(make).asLiveData()) { value ->
-//                liveData.setValue(value)
-//            }
-//        } else if (model != null) {
-//            liveData.addSource(carAdDao.getByModel(model).asLiveData()) { value ->
-//                liveData.setValue(value)
-//            }
-//        } else {
-//            liveData.addSource(carAdDao.getAll().asLiveData()) { value ->
-//                liveData.setValue(value)
-//            }
-//        }
+    fun filterModels(make: String?) {
+        make?.let {
+            models.addSource(carAdDao.getModels(make).asLiveData()) { value ->
+                models.setValue(value)
+            }
+        } ?: run {
+            models.setValue(emptyList())
+        }
     }
 
-    suspend fun getMakes(): List<String> {
-        return carAdDao.getMakes()
+    init {
+        filterCarAds()
     }
 
-    suspend fun getModels(): List<String> {
-        return carAdDao.getModels()
+    fun filterCarAds(make: String? = null, model: String? = null) {
+        if (make != null && model != null) {
+            carAds.addSource(carAdDao.getByMakeAndModel(make, model).asLiveData()) { value ->
+                carAds.setValue(value)
+            }
+        } else if (make != null) {
+            carAds.addSource(carAdDao.getByMake(make).asLiveData()) { value ->
+                carAds.setValue(value)
+            }
+        } else if (model != null) {
+            carAds.addSource(carAdDao.getByModel(model).asLiveData()) { value ->
+                carAds.setValue(value)
+            }
+        } else {
+            carAds.addSource(carAdDao.getAll().asLiveData()) { value ->
+                carAds.setValue(value)
+            }
+        }
     }
 }

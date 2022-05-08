@@ -21,10 +21,10 @@ interface CarAdDao {
     fun getByModel(model: String): Flow<List<CarAd>>
 
     @Query("SELECT DISTINCT make FROM CarAd")
-    suspend fun getMakes(): List<String>
+    fun getMakes(): Flow<List<String>>
 
-    @Query("SELECT DISTINCT model FROM CarAd")
-    suspend fun getModels(): List<String>
+    @Query("SELECT DISTINCT model FROM CarAd WHERE make like :make")
+    fun getModels(make: String): Flow<List<String>>
 
     @Insert
     suspend fun insert(word: CarAd)

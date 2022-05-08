@@ -61,5 +61,20 @@
     "prosList": [],
     "rating": 2,
     "uid" : 4
+  },
+  {
+    "consList": [
+      "Bad direction"
+    ],
+    "customerPrice": 120000.0,
+    "make": "Land Rover",
+    "marketPrice": 125000.0,
+    "model": "New Rover",
+    "prosList": [
+      "You can go everywhere",
+      "Good sound system"
+    ],
+    "rating": 3,
+    "uid" : 5
   }
 ]

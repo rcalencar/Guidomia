@@ -19,10 +19,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -31,6 +36,9 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -73,12 +81,31 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun GuidomiaScreen(carAdListViewModel: CarAdListViewModel = viewModel()) {
     val carAdList by carAdListViewModel.liveData.observeAsState(initial = emptyList())
+    val makes by carAdListViewModel.makes.observeAsState(initial = emptyList())
+    val models by carAdListViewModel.models.observeAsState(initial = emptyList())
+    val selectedMake by carAdListViewModel.selectedMake.observeAsState()
+    val selectedModel by carAdListViewModel.selectedModel.observeAsState()
     val selectedItem by carAdListViewModel.selectedItem.observeAsState()
-    CardAdList(
-        adList = carAdList,
-        selectedItem = selectedItem,
-        onSelected = { ad -> carAdListViewModel.selectItem(ad) }
-    )
+
+    Column {
+        DropdownFilter(
+            label = "Any make",
+            selected = selectedMake,
+            items = makes,
+            onSelected = { make -> carAdListViewModel.filterByMakes(make) }
+        )
+        DropdownFilter(
+            label = "Any model",
+            selected = selectedModel,
+            items = models,
+            onSelected = { model -> carAdListViewModel.filterByModel(model) }
+        )
+        CardAdList(
+            adList = carAdList,
+            selectedItem = selectedItem,
+            onSelected = { ad -> carAdListViewModel.selectItem(ad) }
+        )
+    }
 }
 
 @Composable
@@ -234,6 +261,56 @@ private fun bulletList(list: List<String>, container: TextView) {
     container.text = items.joinTo(SpannableStringBuilder(), System.lineSeparator()) {
         SpannableString(it).apply {
             setSpan(BulletSpan(BULLET_GAP_WIDTH, container.context.getColor(R.color.primaryColor), BULLET_RADIUS), 0, this.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview
+@Composable
+fun DropdownFilter(
+    label: String = "Label",
+    selected: String? = null,
+    items: List<String> = emptyList(),
+    onSelected: (String?) -> Unit = { }
+) {
+    val options = listOf(label) + items
+    var expanded by remember { mutableStateOf(false) }
+    val selectedOptionText = selected ?: options[0]
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        TextField(
+            readOnly = true,
+            value = selectedOptionText,
+            onValueChange = { },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }
+        ) {
+            options.forEachIndexed { index, selectionOption ->
+                DropdownMenuItem(
+                    onClick = {
+                        if (index == 0) onSelected(null) else onSelected(selectionOption)
+                        expanded = false
+                    }
+                ) {
+                    Text(text = selectionOption)
+                }
+            }
         }
     }
 }
